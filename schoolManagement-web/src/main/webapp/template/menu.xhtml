@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:b="http://bootsfaces.net/ui">
+    <h:body>
+        <ui:composition>
+            <b:navBar brandStyle="font-size: smaller"  brand="Administration" fluid="true"   brandHref="#" rendered="#{menuBean.activeUser.router.administrator}">
+                <b:navbarLinks style="font-size: smaller">
+                    <b:navCommandLink iconAwesome="fa-home" action="#{menuBean.route('/landingPage')}" immediate="true"></b:navCommandLink>
+                    <b:navCommandLink value="School" action="#{menuBean.route('/school')}"  immediate="true"></b:navCommandLink>
+                    <b:navCommandLink value="User" action="#{menuBean.route('/users')}" immediate="true"></b:navCommandLink>
+                    <b:navCommandLink value="Grade" action="#{menuBean.route('/grade')}" immediate="true"></b:navCommandLink>
+                    <b:navCommandLink value="Subject" action="#{menuBean.route('/subject')}" immediate="true"></b:navCommandLink>
+                    <b:navCommandLink value="Employee" action="#{menuBean.route('/employee')}" immediate="true"></b:navCommandLink>
+                    <b:navCommandLink value="Student" action="#{menuBean.route('/student')}" immediate="true"></b:navCommandLink>
+                    <b:navCommandLink value="Profile" action="#{menuBean.route('/profile')}" immediate="true"></b:navCommandLink>
+                </b:navbarLinks>
+            </b:navBar>
+            <b:navBar brandStyle="font-size: smaller"  brand="EMPLOYEE" fluid="true"   brandHref="#" rendered="#{menuBean.activeUser.router.educator or menuBean.activeUser.router.hod or menuBean.activeUser.router.principal}">
+                <b:navbarLinks style="font-size: smaller">
+                    <b:navCommandLink iconAwesome="fa-home" action="#{menuBean.route('/landingPage')}" immediate="true"></b:navCommandLink>
+                    <b:navCommandLink value="School" action="#{menuBean.route('/school')}"  immediate="true"></b:navCommandLink>
+                    <b:navCommandLink value="Employee" action="#{menuBean.route('/employee')}"  immediate="true"></b:navCommandLink>
+                    <b:navCommandLink value="Student" action="#{menuBean.route('/student')}"  immediate="true"></b:navCommandLink>
+                    <b:navCommandLink value="Assessment" action="#{menuBean.route('/assessment')}"  immediate="true"></b:navCommandLink>
+                    <b:navCommandLink value="Profile" action="#{menuBean.route('/profile')}" immediate="true"></b:navCommandLink>
+                </b:navbarLinks>
+            </b:navBar>
+            <b:navBar brandStyle="font-size: smaller"  brand="STUDENT" fluid="true"   brandHref="#" rendered="#{menuBean.activeUser.router.learner}">
+                <b:navbarLinks style="font-size: smaller">
+                    <b:navCommandLink iconAwesome="fa-home" action="#{menuBean.route('/landingPage')}" immediate="true"></b:navCommandLink>
+                    <b:navCommandLink value="School" action="#{menuBean.route('/school')}"  immediate="true"></b:navCommandLink>
+                    <b:navCommandLink value="Assessment" action="#{menuBean.route('/assessment')}"  immediate="true"></b:navCommandLink>
+                    <b:navCommandLink value="Profile" action="#{menuBean.route('/profile')}" immediate="true"></b:navCommandLink>
+                </b:navbarLinks>
+            </b:navBar>
+        </ui:composition>
+    </h:body>
+</html>
+
+

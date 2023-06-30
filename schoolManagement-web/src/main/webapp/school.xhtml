@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:p="http://primefaces.org/ui">
+    <h:body>
+        <ui:composition template="/template/template.xhtml">
+            <ui:define name="maincontent">
+                <b:panel rendered="#{schoolBean.list}" look="default"  collapsible="false">
+                    <f:facet name="heading">
+                        <b:panelGrid colSpans="12" size="md" styleClass="ui-fluid">
+                            <p:outputLabel value="#{schoolBean.panelTitleName}" styleClass="panel-title-css"/>
+                            <p:separator/>
+                        </b:panelGrid>
+                    </f:facet>
+                    <b:panelGrid colSpans="12" size="md" styleClass="ui-fluid">
+                        <p:fieldset legend="School Details">
+                            <b:inputText label="School Name" readonly="true" value="#{schoolBean.school.schoolName}"/>
+                            <b:inputText label="Registration Number" readonly="true" value="#{schoolBean.school.registationNumber}"/>
+                            <b:inputText label="Cellphone Number" readonly="true" value="#{schoolBean.school.contactDetail.cellphoneNumber}"/>
+                            <b:inputText label="Telephone Number" readonly="true"  value="#{schoolBean.school.contactDetail.telephoneNumber}"/>
+                            <b:inputText label="Email Address" readonly="true" value="#{schoolBean.school.contactDetail.email}"/>
+                        </p:fieldset>
+                    </b:panelGrid>
+                    <p:spacer width="10px"/>
+                    <p:dataGrid  value="#{schoolBean.school.addresses}" var="address" columns="2">
+                        <b:panelGrid colSpans="12" size="md" styleClass="ui-fluid">                            
+                            <p:fieldset legend="School #{address.addressType.toString()}">
+                                <b:inputText label="Address Line 1" readonly="true" field-size="md" value="#{address.addressLine1}"/> 
+                                <b:inputText label="Address Line 2" readonly="true" field-size="md"  value="#{address.addressLine2}"/> 
+                                <b:inputText label="Area" readonly="true" field-size="md"  value="#{address.area}"/>
+                                <b:inputText label="Street" readonly="true" field-size="md"  value="#{address.street}"/> 
+                                <b:inputText label="Code" readonly="true" field-size="md"  value="#{address.code}"/> 
+                            </p:fieldset>
+                        </b:panelGrid>
+                    </p:dataGrid>
+                    <f:facet name="footer">
+                        <p:toolbar>
+                            <f:facet name="right">
+                                <b:commandButton rendered="#{activeUserBean.router.administrator}" look="primary" size="xs" value="Edit" icon-size="xs" iconBrand="5.2.0" iconAwesome="fa-pencil"  action="#{schoolBean.update(schoolBean.school)}" update="@form"/> 
+                            </f:facet>
+                        </p:toolbar>
+                    </f:facet>
+                </b:panel>  
+                <b:panel rendered="#{schoolBean.add and activeUserBean.router.administrator}" look="default"  collapsible="false">
+                    <b:panelGrid colSpans="12" size="md" styleClass="ui-fluid">
+                        <p:fieldset legend="School Details">
+                            <b:inputText label="School Name" value="#{schoolBean.school.schoolName}"/>
+                            <b:inputText label="Registration Number" value="#{schoolBean.school.registationNumber}"/>
+                            <b:inputText label="Cellphone Number" value="#{schoolBean.school.contactDetail.cellphoneNumber}"/>
+                            <b:inputText label="Telephone Number" value="#{schoolBean.school.contactDetail.telephoneNumber}"/>
+                            <b:inputText label="Email Address" value="#{schoolBean.school.contactDetail.email}"/>
+                        </p:fieldset>
+                    </b:panelGrid>
+                    <p:spacer width="10px"/>
+                    <p:dataGrid  value="#{schoolBean.school.addresses}" var="address" columns="2">
+                        <b:panelGrid colSpans="12" size="md" styleClass="ui-fluid">                            
+                            <p:fieldset legend="School #{address.addressType.toString()}">
+                                <b:inputText label="Address Line 1"  field-size="md" value="#{address.addressLine1}"/> 
+                                <b:inputText label="Address Line 2"  field-size="md"  value="#{address.addressLine2}"/> 
+                                <b:inputText label="Area" field-size="md"  value="#{address.area}"/>
+                                <b:inputText label="Street"  field-size="md"  value="#{address.street}"/> 
+                                <b:inputText label="Code" field-size="md"  value="#{address.code}"/> 
+                            </p:fieldset>
+                        </b:panelGrid>
+                    </p:dataGrid>
+                    <b:panel look="default"  collapsible="false">
+                        <b:panelGrid colSpans="6,6" size="md" styleClass="ui-fluid">
+                            <p:fieldset legend="Employees">
+                                <p:dataTable value="#{schoolBean.employees}" var="employee" paginator="true" paginatorAlwaysVisible="false" reflow="true" rows="10">
+                                    <p:column headerText="Full names">
+                                        <h:outputText value="#{employee.firstName} #{employee.lastName}"/>
+                                    </p:column>
+                                    <p:column headerText="Employee Number">
+                                        <h:outputText value="#{employee.employeeId}"/>
+                                    </p:column>
+                                    <p:column headerText="Employee Sace Reg">
+                                        <h:outputText value="#{employee.saceReg}"/>
+                                    </p:column>
+                                    <p:column headerText="Employee Cellphone Number">
+                                        <h:outputText value="#{employee.contactDetail.cellphoneNumber}"/>
+                                    </p:column>
+                                    <p:column headerText="Employee Telephone Number">
+                                        <h:outputText value="#{employee.contactDetail.telephoneNumber}"/>
+                                    </p:column>
+                                    <p:column headerText="Employee Type">
+                                        <h:outputText value="#{employee.employeeType.toString()}"/>
+                                    </p:column>
+                                </p:dataTable> 
+                            </p:fieldset>
+                            <p:fieldset legend="Students">
+                                <p:dataTable value="#{schoolBean.students}" var="student" paginator="true" paginatorAlwaysVisible="false" reflow="true" rows="10">
+                                    <p:column headerText="Full names">
+                                        <h:outputText value="#{student.firstName} #{student.lastName}"/>
+                                    </p:column>
+                                    <p:column headerText="Student Number">
+                                        <h:outputText value="#{student.studentNumber}"/>
+                                    </p:column>
+                                    <p:column headerText="Student Cellphone Number">
+                                        <h:outputText value="#{student.contactDetail.cellphoneNumber}"/>
+                                    </p:column>
+                                    <p:column headerText="Student Telephone Number">
+                                        <h:outputText value="#{student.contactDetail.telephoneNumber}"/>
+                                    </p:column>
+                                    <p:column headerText="Type">
+                                        <h:outputText value="#{student.personType.toString()}"/>
+                                    </p:column>
+                                </p:dataTable> 
+                            </p:fieldset>
+                        </b:panelGrid>
+                    </b:panel>
+                    <b:panel look="default"  collapsible="false">
+                        <b:panelGrid colSpans="6,6" size="md" styleClass="ui-fluid">
+                            <p:fieldset legend="Grades">
+                                <p:dataTable value="#{schoolBean.grades}" var="grade" paginator="true" paginatorAlwaysVisible="false" reflow="true" rows="10">
+                                    <p:column headerText="Description">
+                                        <h:outputText value="#{grade.designation}"/>
+                                    </p:column>
+                                </p:dataTable> 
+                            </p:fieldset>
+                            <p:fieldset legend="Subjects">
+                                <p:dataTable value="#{schoolBean.subjects}" var="subject" paginator="true" paginatorAlwaysVisible="false" reflow="true" rows="10">
+                                    <p:column headerText="Subject Name">
+                                        <h:outputText value="#{subject.name}"/>
+                                    </p:column>
+                                    <p:column headerText="Subject Code">
+                                        <h:outputText value="#{subject.code}"/>
+                                    </p:column>
+                                </p:dataTable> 
+                            </p:fieldset>
+                        </b:panelGrid>
+                    </b:panel>
+                    <f:facet rendered="#{activeUserBean.router.administrator}" name="footer">
+                        <p:toolbar>
+                            <f:facet name="right">
+                                <b:commandButton rendered="#{activeUserBean.router.administrator}" size="md" value="Save" look="success" action="#{schoolBean.save(schoolBean.entity)}" update="@form" />
+                                <p:spacer width="10px"/>
+                                <b:commandButton rendered="#{activeUserBean.router.administrator}" size="md" value="Cancel" look="danger" action="#{schoolBean.cancel(schoolBean.entity)}" immediate="true" update="@form"/>
+                            </f:facet>
+                        </p:toolbar>
+                    </f:facet>
+                </b:panel>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

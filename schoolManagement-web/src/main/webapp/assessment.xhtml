@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+
+    </h:head>
+    <h:body>
+        <ui:composition template="/template/template.xhtml">
+            <ui:define name="maincontent">
+                <b:panel rendered="#{assessmentBean.list}" look="primary" title="Assessment Information" collapsible="false">
+                    <p:dataTable rendered="#{not activeUserBean.router.administrator}" value="#{assessmentBean.assessments}" var="assessment" paginator="true" paginatorPosition="top" paginatorAlwaysVisible="false" reflow="true" rows="10">
+                        <f:facet name="header">
+                            <p:toolbar>
+                                <f:facet name="left">
+                                    <b:commandButton rendered="#{not activeUserBean.router.learner}" iconSize="lg" iconAwesome="fa-plus" look="primary" value="Add" action="#{assessmentBean.addOrUpdate(null)}" update="@form"/>
+                                </f:facet>
+                            </p:toolbar>
+                        </f:facet>
+                        <p:column headerText="Created Date">
+                            <h:outputText value="#{assessment.createdDate}">
+                                <f:convertDateTime pattern="yyyy MM dd"/>
+                            </h:outputText>
+                        </p:column>                    
+                        <p:column headerText="Assessment Name">
+                            <h:outputText value="#{assessment.name}"/>
+                        </p:column>
+                        <p:column headerText="Assessment description">
+                            <h:outputText value="#{assessment.description}"/>
+                        </p:column>
+                        <p:column headerText="Student">
+                            <h:outputText value="#{assessment.student.firstName} #{assessment.student.lastName} (#{assessment.student.studentNumber})"/>
+                        </p:column>
+                        <p:column headerText="Subject">
+                            <h:outputText value="#{assessment.subject.name} #{assessment.subject.code}"/>
+                        </p:column>
+                        <p:column headerText="Due Date">
+                            <h:outputText value="#{assessment.dueDate}">
+                                <f:convertDateTime pattern="yyyy MM dd"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="First Submission Date">
+                            <h:outputText value="#{assessment.firstSubmissionDate}">
+                                <f:convertDateTime pattern="yyyy MM dd"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="Latest Submission Date">
+                            <h:outputText value="#{assessment.updatedDate}">
+                                <f:convertDateTime pattern="yyyy MM dd"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="Total Mark">
+                            <h:outputText value="#{assessment.fullMark}"/>
+                        </p:column>
+                        <p:column headerText="Pass Mark">
+                            <h:outputText value="#{assessment.passMark}"/>
+                        </p:column>
+                        <p:column headerText="Student Mark">
+                            <h:outputText value="#{assessment.studentMark}"/>
+                        </p:column> 
+                        <p:column headerText="Status">
+                            <h:outputText value="#{assessment.assesmentStatus.toString()}"/>
+                        </p:column>
+                         <p:column headerText="Educator">
+                             <h:outputText value="#{assessment.educator.firstName} #{assessment.educator.lastName} (#{assessment.educator.employeeId})"/>
+                        </p:column>
+                        <p:column headerText="Action" styleClass="large">
+                            <b:commandButton look="primary" size="xs" value="Edit" icon-size="xs" iconAwesome="fa-pencil" action="#{assessmentBean.addOrUpdate(assessment)}" update="@form"/>
+                            <p:spacer width="5px"/>
+                            <b:commandButton look="danger" size="xs" value="Del" icon-size="xs" iconAwesome="fa-trash" action="#{assessmentBean.delete(assessment)}" update="@form"/>
+                        </p:column>
+                    </p:dataTable>
+                </b:panel>
+                <b:panel rendered="#{assessmentBean.add}" look="primary" title="Assessment" collapsible="false">
+                    <b:panelGrid colSpans="6,6" size="md" style-class="ui-fluid">
+                        <b:formGroup>
+                            <p:outputLabel value="Assessment Name"/>
+                            <b:inputText value="#{assessmentBean.entity.name}" required="true" requiredMessage="Please enter Assessment Name"/>
+                        </b:formGroup>
+                        <b:formGroup>
+                            <p:outputLabel value="Assessment Description"/>
+                            <b:inputText value="#{assessmentBean.entity.description}" required="true" requiredMessage="Please enter Assessment Description"/>
+                        </b:formGroup>
+                        <b:formGroup>
+                            <p:outputLabel value="First Submission Date"/>
+                            <b:datepicker value="#{assessmentBean.entity.firstSubmissionDate}" rendered="true" requiredMessage="Please select the first submission date"/>
+                        </b:formGroup>
+                        <b:formGroup>
+                            <p:outputLabel value="Due Date"/>
+                            <b:datepicker value="#{assessmentBean.entity.dueDate}" rendered="true" requiredMessage="Please select the due date"/>
+                        </b:formGroup>
+                        <b:formGroup>
+                            <p:outputLabel value="Full Mark"/>
+                            <b:inputText value="#{assessmentBean.entity.fullMark}" required="true" requiredMessage="Please enter Full Mark"/>
+                        </b:formGroup>
+                        <b:formGroup>
+                            <p:outputLabel value="Pass Mark"/>
+                            <b:inputText value="#{assessmentBean.entity.passMark}" required="true" requiredMessage="Please enter Pass Mark"/>
+                        </b:formGroup>
+                        <b:formGroup>
+                            <p:outputLabel value="Grade"/>
+                            <p:selectOneMenu label="Grade" value="#{assessmentBean.entity.grade}" converter="entityConverter" filter="false">
+                                <p:ajax update="studentTab" listener="#{assessmentBean.gradeSelectionListener}"/>
+                                <f:selectItem itemLabel="Select One"  noSelectionOption="true"/>
+                                <f:selectItems value="#{assessmentBean.grades}" var="grade" itemLabel="#{grade.designation}" itemValue="#{grade}"/>
+                            </p:selectOneMenu>
+                        </b:formGroup>
+                        <p:outputPanel id="studentTab" styleClass="ui-fluid">
+                            <b:formGroup rendered="#{assessmentBean.visible}">
+                                <b:formGroup>
+                                    <p:outputLabel value="Student"/>
+                                    <p:selectOneMenu label="Student" value="#{assessmentBean.entity.student}" converter="entityConverter" filter="false">
+                                        <f:selectItem itemLabel="Select One"  noSelectionOption="true"/>
+                                        <f:selectItems value="#{assessmentBean.students}" var="student" itemLabel="#{student.firstName} #{student.lastName} (#{student.identityNumber})" itemValue="#{student}"/>
+                                    </p:selectOneMenu>
+                                </b:formGroup>
+                                <b:formGroup>
+                                    <p:outputLabel value="Subject"/>
+                                    <p:selectOneMenu label="Subject" value="#{assessmentBean.entity.subject}" converter="entityConverter" filter="false">
+                                        <f:selectItem itemLabel="Select One"  noSelectionOption="true"/>
+                                        <f:selectItems value="#{assessmentBean.subjects}" var="subject" itemLabel="#{subject.name} (#{subject.code})" itemValue="#{subject}"/>
+                                    </p:selectOneMenu>
+                                </b:formGroup>
+                                <b:formGroup>
+                                    <p:outputLabel value="Student Mark"/>
+                                    <b:inputText value="#{assessmentBean.entity.studentMark}" required="true" requiredMessage="Please enter Student Mark"/>
+                                </b:formGroup>
+                            </b:formGroup>
+                        </p:outputPanel>                         
+                    </b:panelGrid>
+                    <f:facet name="footer">
+                        <p:toolbar>
+                            <f:facet name="right">
+                                <b:commandButton size="xs" look="success" value="save" action="#{assessmentBean.save(assessmentBean.entity)}" update="@form"/>
+                                <p:spacer width="15px"/>
+                                <b:commandButton size="xs" look="danger" value="cancel" action="#{assessmentBean.cancel(assessmentBean.entity)}" immediate="true" update="@form"/>
+                            </f:facet>
+                        </p:toolbar>
+                    </f:facet>
+                </b:panel>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

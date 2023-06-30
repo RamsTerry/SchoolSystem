@@ -1,0 +1,11 @@
+sars\gov\za\schoolManagement\domain\Employee.class
+sars\gov\za\schoolManagement\domain\Grade.class
+sars\gov\za\schoolManagement\domain\BaseEntity.class
+sars\gov\za\schoolManagement\domain\Person.class
+sars\gov\za\schoolManagement\domain\Student.class
+sars\gov\za\schoolManagement\domain\Assessment.class
+sars\gov\za\schoolManagement\domain\Subject.class
+sars\gov\za\schoolManagement\domain\User.class
+sars\gov\za\schoolManagement\domain\School.class
+sars\gov\za\schoolManagement\domain\Address.class
+sars\gov\za\schoolManagement\domain\ContactDetail.class

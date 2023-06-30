@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:p="http://primefaces.org/ui">
+    <h:body>
+        <ui:composition template="/template/template.xhtml">
+            <ui:define name="maincontent">
+                <b:panel rendered="#{employeeBean.list}" look="default"  collapsible="false">
+                    <f:facet name="heading">
+                        <b:panelGrid colSpans="12" size="md" styleClass="ui-fluid">
+                            <p:outputLabel value="#{employeeBean.panelTitleName}" styleClass="panel-title-css"/>
+                            <p:separator/>
+                        </b:panelGrid>
+                    </f:facet>
+                    <p:dataTable value="#{employeeBean.employees}" var="employee" paginator="true" paginatorAlwaysVisible="false" reflow="true" rows="10">
+                        <f:facet name="header">
+                            <p:toolbar>
+                                <f:facet name="left">
+                                    <b:commandButton rendered="#{activeUserBean.router.administrator}" iconSize="lg" iconAwesome="fa-plus" look="primary" value="Add" action="#{employeeBean.addOrUpdate(null)}" update="@form"/>
+                                </f:facet>
+                            </p:toolbar>
+                        </f:facet>
+                        <p:column headerText="Hire Date">
+                            <h:outputText value="#{employee.createdDate}">
+                                <f:convertDateTime pattern="yyyy-MM-dd"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="Full Names">
+                            <h:outputText value="#{employee.firstName} #{employee.lastName}"/>
+                        </p:column>
+                        <p:column headerText="Identity Number">
+                            <h:outputText value="#{employee.identityNumber}"/>
+                        </p:column>
+                        <p:column headerText="Gender">
+                            <h:outputText value="#{employee.gender.toString()}"/>
+                        </p:column>
+                        <p:column headerText="Employee Number">
+                            <h:outputText value="#{employee.employeeId}"/>
+                        </p:column>
+                        <p:column headerText="Email Address">
+                            <h:outputText value="#{employee.contactDetail.email}"/>
+                        </p:column>
+                        <p:column headerText="Position">
+                            <h:outputText value="#{employee.employeeType.toString()}"/>
+                        </p:column>
+                        <p:column headerText="Action" styleClass="large" rendered="#{activeUserBean.router.administrator}">
+                            <b:commandButton  look="primary" size="xs" value="Edit" icon-size="xs" iconAwesome="fa-pencil"  action="#{employeeBean.addOrUpdate(employee)}" update="@form"/>
+                            <p:spacer width="5px"/>
+                            <b:commandButton look="danger" size="xs" value="Del" icon-size="xs" iconAwesome="fa-trash" action="#{employeeBean.delete(employee)}" update="@form"/>
+                        </p:column>
+                    </p:dataTable>
+                </b:panel>
+                <b:panel rendered="#{employeeBean.add}" look="default" collapsible="false">
+                    <f:facet name="heading">
+                        <p:outputLabel value="#{employeeBean.panelTitleName}" styleClass="panel-title-css"/>
+                    </f:facet>
+                    <b:panelGrid colSpans="6,6" size="md" styleClass="ui-fluid"> 
+                        <b:formGroup>
+                            <p:outputLabel value="First Name"/>
+                            <b:inputText value="#{employeeBean.entity.firstName}" required="true" requiredMessage="Please enter first name"/>
+                        </b:formGroup>
+                        <b:formGroup>
+                            <p:outputLabel value="Last Name"/>
+                            <b:inputText value="#{employeeBean.entity.lastName}" required="true" requiredMessage="Please enter last name"/>
+                        </b:formGroup>
+                        <b:formGroup>
+                            <p:outputLabel value="Identity Number"/>
+                            <b:inputText value="#{employeeBean.entity.identityNumber}" mask="numeric" maxlength="13" required="true" requiredMessage="Please enter identity number"/>
+                        </b:formGroup>
+                        <b:formGroup>
+                            <p:outputLabel value="Gender"/>
+                            <p:selectOneMenu label="Gender" value="#{employeeBean.entity.gender}" converter="entityConverter" filter="false">
+                                <f:selectItem itemLabel="Select One"  noSelectionOption="true"/>
+                                <f:selectItems value="#{employeeBean.genders}" var="gender" itemLabel="#{gender.toString()}" itemValue="#{gender}"/>
+                            </p:selectOneMenu>
+                        </b:formGroup>
+                        <b:formGroup>
+                            <p:outputLabel value="Employee Number"/>
+                            <b:inputText value="#{employeeBean.entity.employeeId}" required="true" requiredMessage="Please enter employee number"/>
+                        </b:formGroup>
+                        <b:formGroup>
+                            <p:outputLabel value="Cellphone Number"/>
+                            <b:inputText value="#{employeeBean.entity.contactDetail.cellphoneNumber}" mask="numeric" maxlength="10" required="true" requiredMessage="Please enter cellphone number"/>
+                        </b:formGroup>
+                        <b:formGroup>
+                            <p:outputLabel value="Tellphone Number"/>
+                            <b:inputText value="#{employeeBean.entity.contactDetail.telephoneNumber}" mask="numeric" maxlength="10" required="true" requiredMessage="Please enter telephone number"/>
+                        </b:formGroup>
+                        <b:formGroup>
+                            <p:outputLabel value="Email Address"/>
+                            <b:inputText value="#{employeeBean.entity.contactDetail.email}" required="true" requiredMessage="Please enter email address"/>
+                        </b:formGroup>
+                        <b:formGroup>
+                            <p:outputLabel value="Employee Type"/>
+                            <p:selectOneMenu label="Employee Type" value="#{employeeBean.entity.employeeType}" converter="entityConverter" filter="false">
+                                <p:ajax update="employee saceReg" listener="#{employeeBean.employeeTypeListener}"/>
+                                <f:selectItem itemLabel="Select One"  noSelectionOption="true"/>
+                                <f:selectItems value="#{employeeBean.employeeTypes}" var="empType" itemLabel="#{empType.toString()}" itemValue="#{empType}"/>
+                            </p:selectOneMenu>
+                        </b:formGroup>
+                        <p:outputPanel id="saceReg" styleClass="ui-fluid">
+                            <b:formGroup rendered="#{employeeBean.employeeVisible}">
+                                <p:outputLabel value="Employee Sace Registration Number"/>
+                                <b:inputText value="#{employeeBean.entity.saceReg}" required="true" requiredMessage="Please enter Sace Registration Number"/>
+                            </b:formGroup>
+                        </p:outputPanel>
+                    </b:panelGrid>
+                    <b:panelGrid colSpans="12" size="md" styleClass="ui-fluid"> 
+                        <b:formGroup>
+                            <p:outputPanel id="employee" styleClass="ui-fluid">
+                                <b:panelGrid rendered="#{employeeBean.employeeVisible}" colSpans="6,6" style-class="ui-fluid" size="md">
+                                    <p:fieldset legend="Subjects">
+                                        <b:panelGrid id="subjectListEmp" colSpans="12" size="md" style-class="ui-fluid">
+                                            <h:selectManyCheckbox value="#{employeeBean.entity.subjects}" layout="pageDirection" converter="entityConverter" collectionType="java.util.ArrayList">
+                                                <f:selectItems value="#{employeeBean.subjects}" var="subject" itemLabel="#{subject.name} #{subject.code}" itemValue="#{subject}"/>
+                                            </h:selectManyCheckbox>
+                                        </b:panelGrid>
+                                    </p:fieldset>
+                                    <p:fieldset legend="Grades">
+                                        <b:panelGrid id="gradesListEmp" colSpans="12" size="md" style-class="ui-fluid">
+                                            <h:selectManyCheckbox value="#{employeeBean.entity.grades}" layout="pageDirection" converter="entityConverter" collectionType="java.util.ArrayList">
+                                                <f:selectItems value="#{employeeBean.grades}" var="grade" itemLabel="#{grade.designation}" itemValue="#{grade}"/>
+                                            </h:selectManyCheckbox>
+                                        </b:panelGrid>
+                                    </p:fieldset>
+                                </b:panelGrid>
+                            </p:outputPanel>
+                        </b:formGroup>
+                    </b:panelGrid>
+                    <p:dataGrid value="#{employeeBean.entity.addresses}" var="address" columns="2">
+                        <b:panelGrid col-spans="12" size="md" style-class="ui-fluid">
+                            <p:fieldset legend="#{address.addressType.toString()}">
+                                <b:inputText value="#{address.addressLine1}" label="Address Line 1" field-size="md" readonly="#{addressType eq 'POSTAL'}"/>
+                                <b:inputText value="#{address.addressLine2}" label="Address Line 2" field-size="md"/>
+                                <b:inputText value="#{address.street}" label="Street" field-size="md" readonly="#{addressType eq 'POSTAL'}"/>
+                                <b:inputText value="#{address.area}" label="Area" field-size="md"/>
+                                <b:inputText value="#{address.code}" label="Code" field-size="md"/>
+                            </p:fieldset>
+                        </b:panelGrid>
+                    </p:dataGrid>
+                    <f:facet name="footer">
+                        <b:row>
+                            <b:panelGrid colSpans="6,6" size="md" styleClass="ui-fluid">
+                                <b:commandButton large-screen="full-width" size="md" value="Save" look="success" action="#{employeeBean.save(employeeBean.entity)}"  update="@form" />
+                                <b:commandButton large-screen="full-width" size="md" value="Cancel" look="danger" action="#{employeeBean.cancel(employeeBean.entity)}" immediate="true" update="@form" ajax="true" />
+                            </b:panelGrid>
+                        </b:row>
+                    </f:facet>
+                </b:panel>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

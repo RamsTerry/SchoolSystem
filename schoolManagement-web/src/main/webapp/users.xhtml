@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:p="http://primefaces.org/ui">
+    <h:body>
+        <ui:composition template="/template/template.xhtml">
+            <ui:define name="maincontent">
+                <b:panel rendered="#{userBean.list}" look="default"  collapsible="false">
+                    <f:facet name="heading">
+                        <b:panelGrid colSpans="12" size="md" styleClass="ui-fluid">
+                            <p:outputLabel value="#{userBean.panelTitleName}" styleClass="panel-title-css"/>
+                            <p:separator/>
+                        </b:panelGrid>
+                    </f:facet>
+                    <p:dataTable value="#{userBean.users}" var="user" paginator="true" paginatorAlwaysVisible="false" reflow="true" rows="10">
+                        <f:facet name="header">
+                            <p:toolbar>
+                                <f:facet name="left">
+                                    <b:commandButton iconSize="lg" rendered="#{activeUserBean.router.administrator}" iconAwesome="fa-plus" look="primary" value="Add" action="#{userBean.addOrUpdate(null)}" update="@form"/>
+                                </f:facet>
+                            </p:toolbar>
+                        </f:facet>
+                        <p:column headerText="Added Date">
+                            <h:outputText value="#{user.createdDate}">
+                                <f:convertDateTime pattern="dd-MMM-yyyy"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="Created By">
+                            <h:outputText value="#{user.createdBy}"/>
+                        </p:column>
+                        <p:column headerText="Username">
+                            <h:outputText value="#{user.username}"/>
+                        </p:column>
+                        <p:column headerText="Identifier">
+                            <h:outputText value="#{user.identifier}"/>
+                        </p:column>
+                        <p:column headerText="Gender">
+                            <h:outputText value="#{user.gender.toString()}"/>
+                        </p:column>
+                        <p:column headerText="Status">
+                            <h:outputText value="#{user.systemUserStatus.toString()}"/>
+                        </p:column>
+                        <p:column headerText="Role">
+                            <h:outputText value="#{user.personType.toString()}"/>
+                        </p:column>
+                        <p:column headerText="Action" styleClass="large">
+                            <b:commandButton look="primary" size="xs" rendered="#{activeUserBean.router.administrator}" value="Edit" icon-size="xs" iconAwesome="fa-pencil"  action="#{userBean.addOrUpdate(user)}" update="@form"/>
+                            <p:spacer width="5px"/>
+                            <b:commandButton look="danger" rendered="#{activeUserBean.router.administrator}" size="xs" value="Del" icon-size="xs" iconAwesome="fa-trash" action="#{userBean.delete(user)}" update="@form"/>
+                        </p:column>
+                    </p:dataTable>
+                </b:panel>
+                <b:panel rendered="#{userBean.add}" look="default" collapsible="false">
+                    <f:facet name="heading">
+                        <p:outputLabel value="#{userBean.panelTitleName}" styleClass="panel-title-css"/>
+                    </f:facet>
+                    <b:panelGrid colSpans="6,6" size="md" style-class="ui-fluid">                        
+                        <b:formGroup>
+                            <p:outputLabel value="Username"/>
+                            <b:inputText value="#{userBean.entity.username}" field-size="md"/>
+                        </b:formGroup>
+                        <b:formGroup>
+                            <p:outputLabel value="Password"/>
+                            <b:inputText value="#{userBean.entity.passwords}" field-size="md"/>
+                        </b:formGroup>
+                        <b:formGroup>
+                            <p:outputLabel value="Confirm Password"/>
+                            <b:inputText value="#{userBean.entity.confirmPassword}" field-size="md"/>
+                        </b:formGroup>
+                        <b:formGroup>
+                            <p:outputLabel value="Status"/>
+                            <p:selectOneMenu value="#{userBean.entity.systemUserStatus}" required="true" converter="entityConverter" label="Status" requiredMessage="Please select a status">
+                                <f:selectItem itemLabel="Select One"  noSelectionOption="true"/>
+                                <f:selectItems value="#{userBean.systemUserStatuses}" var="status" itemLabel="#{status.toString()}" itemValue="#{status}"/>
+                            </p:selectOneMenu>
+                        </b:formGroup>
+                        <b:formGroup>
+                            <p:outputLabel  value="System User Type"/>
+                            <p:selectOneMenu value="#{userBean.entity.personType}" required="true" converter="entityConverter" requiredMessage="Please select the user type">
+                                <p:ajax event="change" listener="#{userBean.systemUserListerner}" update="employee student"/>
+                                <f:selectItem itemLabel="Select One" noSelectionOption="true"/>
+                                <f:selectItems value="#{userBean.personTypes}" var="personType" itemLabel="#{personType.toString()}" itemValue="#{personType}"/>
+                            </p:selectOneMenu>
+                        </b:formGroup>
+                        <b:formGroup>
+                            <p:outputPanel id="employee" styleClass="ui-fluid">
+                                <b:formGroup rendered="#{userBean.employeeVisible}">
+                                    <p:outputLabel value="Employee"/>
+                                    <p:selectOneMenu value="#{userBean.entity.identifier}" required="true" converter="entityConverter" label="Employee" requiredMessage="Please select a Employee">
+                                        <f:selectItem itemLabel="Select One"  noSelectionOption="true"/>
+                                        <f:selectItems value="#{userBean.employees}" var="employee" itemLabel="#{employee.firstName} #{employee.lastName} (#{employee.employeeId})" itemValue="#{employee.employeeId}"/>
+                                    </p:selectOneMenu>
+                                </b:formGroup>
+                            </p:outputPanel>
+                            <p:outputPanel id="student" styleClass="ui-fluid">
+                                <b:formGroup rendered="#{userBean.studentVisible}">
+                                    <p:outputLabel value="Student"/>
+                                    <p:selectOneMenu value="#{userBean.entity.identifier}" required="true" converter="entityConverter" label="Student" requiredMessage="Please select a Student">
+                                        <f:selectItem itemLabel="Select One"  noSelectionOption="true"/>
+                                        <f:selectItems value="#{userBean.students}" var="student" itemLabel="#{student.firstName} #{student.lastName} #{student.studentNumber})" itemValue="#{student.studentNumber}"/>
+                                    </p:selectOneMenu>
+                                </b:formGroup>
+                            </p:outputPanel>
+                        </b:formGroup>
+                    </b:panelGrid>
+                    <f:facet name="footer">
+                        <p:toolbar>
+                            <f:facet name="right">
+                                <b:commandButton size="md" value="Save" look="success" action="#{userBean.save(userBean.entity)}" update="@form" />
+                                <p:spacer width="10px"/>
+                                <b:commandButton size="md" value="Cancel" look="danger" action="#{userBean.cancel(userBean.entity)}" immediate="true" update="@form"/>
+                            </f:facet>
+                        </p:toolbar>
+                    </f:facet>
+                </b:panel> 
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

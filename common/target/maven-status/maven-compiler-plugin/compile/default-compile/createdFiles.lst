@@ -1,0 +1,10 @@
+sars\gov\za\schoolManagement\common\PersonType.class
+sars\gov\za\schoolManagement\common\TestDataSourceConfiguration.class
+sars\gov\za\schoolManagement\common\EmployeeType.class
+sars\gov\za\schoolManagement\common\SystemUserType.class
+sars\gov\za\schoolManagement\common\AssesmentStatus.class
+sars\gov\za\schoolManagement\common\DataSourceUtility.class
+sars\gov\za\schoolManagement\common\SystemUserStatus.class
+sars\gov\za\schoolManagement\common\AddressType.class
+sars\gov\za\schoolManagement\common\DataSourceConfiguration.class
+sars\gov\za\schoolManagement\common\Gender.class

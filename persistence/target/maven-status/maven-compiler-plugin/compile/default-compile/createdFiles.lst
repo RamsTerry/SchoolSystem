@@ -1,0 +1,7 @@
+sars\gov\za\schoolManagement\persistence\GradeRepository.class
+sars\gov\za\schoolManagement\persistence\SystemUserRepository.class
+sars\gov\za\schoolManagement\persistence\SubjectRepository.class
+sars\gov\za\schoolManagement\persistence\EmployeeRepository.class
+sars\gov\za\schoolManagement\persistence\AssessmentRepository.class
+sars\gov\za\schoolManagement\persistence\SchoolRepository.class
+sars\gov\za\schoolManagement\persistence\StudentRepository.class

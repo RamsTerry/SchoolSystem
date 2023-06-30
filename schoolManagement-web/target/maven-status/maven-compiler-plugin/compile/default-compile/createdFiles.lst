@@ -1,0 +1,17 @@
+sars\gov\za\schoolManagement\config\WebAppInitializer.class
+sars\gov\za\schoolManagement\mb\SubjectBean.class
+sars\gov\za\schoolManagement\mb\EmployeeBean.class
+sars\gov\za\schoolManagement\mb\LoginBean.class
+sars\gov\za\schoolManagement\mb\Router.class
+sars\gov\za\schoolManagement\mb\GradeBean.class
+sars\gov\za\schoolManagement\mb\StudentBean.class
+sars\gov\za\schoolManagement\mb\HeaderBean.class
+sars\gov\za\schoolManagement\mb\UserBean.class
+sars\gov\za\schoolManagement\mb\AssessmentBean.class
+sars\gov\za\schoolManagement\mb\ProfileBean.class
+sars\gov\za\schoolManagement\mb\ActiveUserBean.class
+sars\gov\za\schoolManagement\config\EntityConverter.class
+sars\gov\za\schoolManagement\mb\MenuBean.class
+sars\gov\za\schoolManagement\mb\SchoolBean.class
+sars\gov\za\schoolManagement\config\AuthenticationFilter.class
+sars\gov\za\schoolManagement\mb\BaseBean.class
